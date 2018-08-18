@@ -5,13 +5,26 @@
 </head>
 
 <body>
+<div class="container">
+    <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{ URL::to('app') }}">Peringatan Pegawai</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="{{ URL::to('app') }}">Daftar Pegawai</a></li>
+            <li><a href="{{ URL::to('app/create') }}">Tambah Data</a></li>
+        </ul>
+    </nav>
+</div>
     <div class="container">
         <h1>Daftar Baru Pegawai</h1>
-        
-        {{ Form::open(array('url' => 'pegawai')) }}        
+
+        {{ Html::ul($errors->all()) }}
+
+        {{ Form::open(array('url' => 'app')) }}        
         <div class="form-group">
-            {{ Form::label('nim', 'NIM') }}
-            {{ Form::text('nim', Input::old('nim'), array('class' => 'form-control')) }}
+            {{ Form::label('nip', 'NIP') }}
+            {{ Form::text('nip', Input::old('nip'), array('class' => 'form-control')) }}
         </div>
 
         <div class="form-group">

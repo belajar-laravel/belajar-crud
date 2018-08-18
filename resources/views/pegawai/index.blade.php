@@ -8,10 +8,10 @@
 <div class="container">
     <nav class="navbar navbar-inverse">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{{ URL::to('pegawai') }}">Peringatan Pegawai</a>
+            <a class="navbar-brand" href="{{ URL::to('app') }}">Peringatan Pegawai</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="{{ URL::to('pegawai') }}">Daftar Pegawai</a></li>
+            <li><a href="{{ URL::to('app') }}">Daftar Pegawai</a></li>
             <li><a href="{{ URL::to('app/create') }}">Tambah Data</a></li>
         </ul>
     </nav>
@@ -38,8 +38,12 @@
                     <td>{{ $value->nama }}</td>
                     <td>{{ $value->tempat_lahir }}</td>
                     <td>
-                        <a class="btn btn-small btn-success" href="{{ URL::to('pegawai/' . $value->nip) }}">Info</a>
-                        <a class="btn btn-small btn-info" href="{{ URL::to('pegawai/' . $value->nip . '/edit') }}">Ubah</a>
+                        {{ Form::open(array('url' => 'app/' . $value->nip, 'class' => 'pull-right')) }}
+                            {{ Form::hidden('_method', 'DELETE') }}
+                            {{ Form::submit('Hapus data ini', array('class' => 'btn btn-warning')) }}
+                        {{ Form::close() }}
+                        <a class="btn btn-small btn-success" href="{{ URL::to('app/' . $value->nip) }}">Info</a>
+                        <a class="btn btn-small btn-info" href="{{ URL::to('app/' . $value->nip . '/edit') }}">Ubah</a>
                     </td>
                 </tr>
             @endforeach

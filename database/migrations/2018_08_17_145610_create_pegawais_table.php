@@ -17,6 +17,8 @@ class CreatePegawaisTable extends Migration
             $table->string('nip', 19);
             $table->string('nama', 80);
             $table->string('tempat_lahir', 100);
+            $table->date('updated_at');
+            $table->date('created_at');
         });
     }
 

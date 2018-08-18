@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-use Illuminate\Validation\Validator;
 use App\Pegawai;
+use Input;
+use Session;
+use Redirect;
 
 class AppController extends Controller {
 
@@ -19,37 +21,52 @@ class AppController extends Controller {
         return View::make('pegawai.create');
     }
 
-    public function store() {
-        $rules = array(
-            'nim' => 'required', 
-            'nama' => 'required',
-            'tempat_lahir' => 'optional'
-        );
-        $validator = Validator::make(Input::all(), $rules);
+    public function store(Request $request) {
+        $validatedData = $request->validate([
+            'nip' => 'required',
+            'nama' => 'required'
+        ]);
 
-        if($validator->failes()) {
-            return Redirect::to('pegawai/create')
-                ->withErrors($validator)
-                ->withInput(Input::except('password'));
-        } else {
-            $pegawai = new Pegawai;
-            $pegawai->nim = Input::get('nim');
-            $pegawai->nama = Input::get('nama');
-            $pegawai->tempat_lahir = Input::get('tempat_lahir');
-            $pegawai->save();
+        $pegawai = new Pegawai;
+        
+        $pegawai->nip = $request->input('nip'); // Input::get('nim');
+        $pegawai->nama = $request->input('nama'); // Input::get('nama');
+        $pegawai->tempat_lahir = $request->input('tempat_lahir'); // Input::get('tempat_lahir');
 
-            // redirect
-            Session::flash('message', 'Data telah tersimpan');
-            return Redirect::to('pegawai');
-        }
+        $pegawai->save();
+
+        // redirect
+        Session::flash('message', 'Data telah tersimpan');
+        return Redirect::to('app');        
     }
 
-    public function show($id) {}
+    public function show($id) {
+        $pegawai = Pegawai::find($id);
+        return View::make('pegawai.show')->with('pegawai', $pegawai);
+    }
 
-    public function edit($id) {}
+    public function edit($id) {
+        $pegawai = Pegawai::find($id);
+        return View::make('pegawai.edit')->with('pegawai', $pegawai);
+    }
 
-    public function update($id) {}
+    public function update($id) {
+        $pegawai = Pegawai::find($id);
+        $pegawai->nip = Input::get('nip');
+        $pegawai->nama = Input::get('nama');
+        $pegawai->tempat_lahir = Input::get('tempat_lahir');
+        $pegawai->save();
 
-    public function delete($id) {}
+        Session::flash('message', 'Data telah tersimpan');
+        return Redirect::to('app');
+    }
+
+    public function destroy($id) {
+        $pegawai = Pegawai::find($id);
+        $pegawai->delete();
+
+        Session::flash('message', 'Data telah terhapus');
+        return Redirect::to('app');
+    }
     
 }
